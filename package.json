@@ -1,0 +1,28 @@
+{
+  "name": "critical-path-builder",
+  "version": "0.0.1",
+  "description": "Build critical path css and push it into a database",
+  "engines": {
+    "node": "7.4.0"
+  },
+  "main": "src/index.js",
+  "scripts": {
+    "start": "foreman start"
+  },
+  "dependencies": {
+    "bull": "*",
+    "criticalcss": "*",
+    "extend": "*",
+    "request": "*",
+    "cluster": "*"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/wheeyls/critical-path-builder"
+  },
+  "keywords": [
+    "node",
+    "criticalcss"
+  ],
+  "license": "MIT"
+}

@@ -81,19 +81,32 @@ resources:
   Resources:
     generatedCss:
       Type: AWS::DynamoDB::Table
-      TableName: generatedCss
-      AttributesDefinitions:
-        - AttributeName: controllerAction
-          AttributeType: String
-        - AttributeName: generatedAt
-          AttributeType: Date
-        - AttributeName: content
-          AttributeType: String
-      KeySchema:
-        - AttributeName: controllerAction
-          AttributeType: HASH
-      ProvisionedThroughput:
-        WriteCapacityUnits: 1
+      Properties:
+        TableName: generated-css
+        AttributeDefinitions:
+          - AttributeName: controllerAction
+            AttributeType: S
+        KeySchema:
+          - AttributeName: controllerAction
+            KeyType: HASH
+        ProvisionedThroughput:
+          WriteCapacityUnits: 1
+          ReadCapacityUnits: 1
+    DynamoDBIamPolicy:
+      Type: AWS::IAM::Policy
+      DependsOn: generatedCss
+      Properties:
+        PolicyName: lambda-dynamodb
+        PolicyDocument:
+          Version: '2012-10-17'
+          Statement:
+            - Effect: Allow
+              Action:
+                - dynamodb:GetItem
+                - dynamodb:PutItem
+              Resource: arn:aws:dynamodb:*:*:table/generated-css
+        Roles:
+          - Ref: IamRoleLambdaExecution
 #  Outputs:
 #     NewOutput:
 #       Description: "Description for the output"

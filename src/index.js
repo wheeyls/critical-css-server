@@ -3,8 +3,10 @@ var cluster = require('cluster');
 var generator = require('./generator.js');
 var queue = Queue('CriticalPath Generator', 6379, 'localhost');
 var workerCount = 6;
+var redis = require('redis');
 
 g = generator();
+redisClient = redis.createClient({ url: process.env.REDIS_URL });
 
 queue.process(function (job, done) {
   console.log('started...');
