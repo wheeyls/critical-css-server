@@ -1,39 +1,86 @@
 var Queue = require('bull');
 var cluster = require('cluster');
 var generator = require('./generator.js');
-var queue = Queue('CriticalPath Generator', 6379, 'localhost');
+var queue = Queue('CriticalPath Generator', process.env.REDIS_URL);
 var workerCount = 6;
 var redis = require('redis');
 
 g = generator();
-redisClient = redis.createClient({ url: process.env.REDIS_URL });
 
-queue.process(function (job, done) {
-  console.log('started...');
-  g.generate(job.data.url, job.data.css, function (err, output) {
-    if (err) {
-      done(err);
-    } else {
-      done(null, output);
+function cssItem(client, params) {
+  var me
+    ;
+
+  me = {
+    whenNew: function (cb) {
+      client.hgetall(params.key, function (err, value) {
+        if (!value) { cb(err, value); }
+      });
+    },
+
+    createStub: function (cb) {
+      client.hset(params.key, 'status', 'waiting', function (err, value) {
+        cb(err);
+      });
+    },
+
+    finish: function (content, cb) {
+      client.set(params.key, 'content', content, cb);
+    },
+
+    toJSON: function () {
+      return params;
     }
-  });
-});
+  };
 
-if (cluster.isMaster) {
-  queue.add({ url: 'http://localhost:3000', css: 'http://localhost:3000/assets/manifest_assets.css' }).then(function (e, o) {
-    console.log(o);
-  });
-  console.log('queued...');
+  return me;
+}
 
-  setTimeout(function () {
-    queue.add({ url: 'http://localhost:3000', css: 'http://localhost:3000/assets/manifest_assets.css' }).then(function (e, o) {
-      console.log(o);
+function manageQueue() {
+  var subClient = redis.createClient({ url: process.env.REDIS_URL }),
+      client = subClient.duplicate();
+
+  subClient.on('message', function (_topic, params) {
+    params = JSON.parse(params);
+    var item = cssItem(client, params);
+
+    item.whenNew(function (err) {
+      if (err) { throw err; }
+
+      item.createStub(function (err) {
+        if (err) { throw err; }
+
+        queue.add(item.toJSON());
+        console.log('added...');
+      });
     });
-    console.log('queued...');
-  }, 1000);
-} else {
+  });
+
+  subClient.subscribe('critical-css:not-found');
+}
+
+function processItems() {
+  var redisClient = redis.createClient({ url: process.env.REDIS_URL });
+
   queue.on('completed', function (job, result) {
     console.log('completed...');
-    // console.log(result);
   });
+
+  queue.process(function (job, done) {
+    var item = cssItem(redisClient, job.data);
+    console.log('started...');
+    g.generate(job.data.url, job.data.css, function (err, output) {
+      if (err) {
+        done(err);
+      } else {
+        item.finish(output, done);
+      }
+    });
+  });
+}
+
+if (cluster.isMaster) {
+  manageQueue()
+} else {
+  processItems()
 }
