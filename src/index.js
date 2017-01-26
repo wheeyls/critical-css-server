@@ -40,6 +40,8 @@ function manageQueue() {
   var subClient = redis.createClient({ url: process.env.REDIS_URL }),
       client = subClient.duplicate();
 
+  console.log('master started...');
+
   subClient.on('message', function (_topic, params) {
     params = JSON.parse(params);
     var item = cssItem(client, params);
@@ -61,6 +63,7 @@ function manageQueue() {
 
 function processItems() {
   var redisClient = redis.createClient({ url: process.env.REDIS_URL });
+  console.log('worker started...');
 
   queue.on('completed', function (job, result) {
     console.log('completed...');
@@ -80,6 +83,8 @@ function processItems() {
 }
 
 if (cluster.isMaster) {
+  for (var i = 0, ii = workerCount; i < ii; i += 1) { cluster.fork(); }
+
   manageQueue()
 } else {
   processItems()
