@@ -2,7 +2,7 @@ var Queue = require('bull');
 var cluster = require('cluster');
 var generator = require('./generator.js');
 var queue = Queue('CriticalPath Generator', process.env.REDIS_URL);
-var workerCount = 6;
+var workerCount = 1;
 var redis = require('redis');
 
 function cssItem(client, params) {
@@ -85,7 +85,6 @@ function processItems() {
 
 if (cluster.isMaster) {
   for (var i = 0, ii = workerCount; i < ii; i += 1) { cluster.fork(); }
-
   manageQueue()
 } else {
   processItems()
