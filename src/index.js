@@ -25,7 +25,8 @@ function cssItem(client, params) {
     },
 
     finish: function (content, cb) {
-      client.set(params.key, 'content', content, cb);
+      client.hset(params.key, 'status', 'done');
+      client.hset(params.key, 'content', content, cb);
     },
 
     toJSON: function () {
