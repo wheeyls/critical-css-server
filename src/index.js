@@ -5,8 +5,6 @@ var queue = Queue('CriticalPath Generator', process.env.REDIS_URL);
 var workerCount = 6;
 var redis = require('redis');
 
-g = generator();
-
 function cssItem(client, params) {
   var me
     ;
@@ -64,7 +62,9 @@ function manageQueue() {
 
 function processItems() {
   var redisClient = redis.createClient({ url: process.env.REDIS_URL });
+  var g = generator();
   console.log('worker started...');
+
 
   queue.on('completed', function (job, result) {
     console.log('completed...');
