@@ -7,7 +7,7 @@
   },
   "main": "src/index.js",
   "scripts": {
-    "start": "foreman start"
+    "start": "node src/index.js"
   },
   "dependencies": {
     "bull": "*",
