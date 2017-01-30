@@ -1,5 +1,4 @@
-.serverless
+.env
 test-interaction.js
 test-read.js
 npm-debug.log
-.env
