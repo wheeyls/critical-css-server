@@ -12,11 +12,13 @@ extend(CachedCss.prototype, {
   load: function () {
     var that = this;
 
-    return new Promise(function (resolve) {
+    return new Promise(function (resolve, reject) {
       if (that.loaded) {
         resolve(that.attributes);
       } else {
         that.client.hgetall(that.finders.key, function (err, value) {
+          if (err) { return reject(err); }
+
           if (!value) {
             extend(that.attributes, { status: 'new' });
           } else {
