@@ -1,4 +1,4 @@
-var port = process.env.BULL_UI_PORT || 8080;
+var port = process.env.PORT || 8080;
 var redisOpts = require('redis-url').parse(process.env.REDIS_URL);
 var app = require('bull-ui/app')({ redis: {
   host: redisOpts.hostname,
