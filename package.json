@@ -5,16 +5,11 @@
   "engines": {
     "node": "7.4.0"
   },
-  "main": "src/index.js",
+  "main": "src/cluster.js",
   "scripts": {
-    "start": "node src/index.js"
-  },
-  "dependencies": {
-    "bull": "*",
-    "criticalcss": "*",
-    "extend": "*",
-    "request": "*",
-    "cluster": "*"
+    "start": "node src/cluster.js",
+    "dev": "REDIS_URL=redis://127.0.0.1:6379/ node src/cluster.js",
+    "test": "mocha --recursive --debug"
   },
   "repository": {
     "type": "git",
@@ -24,5 +19,18 @@
     "node",
     "criticalcss"
   ],
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "bull": "^2.1.0",
+    "cluster": "^0.7.7",
+    "criticalcss": "^2.1.0",
+    "extend": "^3.0.0",
+    "request": "^2.79.0"
+  },
+  "devDependencies": {
+    "expect.js": "^0.3.1",
+    "mocha": "^3.2.0",
+    "redis-mock": "^0.16.0",
+    "simple-mock": "^0.7.3"
+  }
 }
