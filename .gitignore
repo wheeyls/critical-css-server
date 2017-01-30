@@ -1,3 +1,4 @@
 .serverless
 test-interaction.js
 test-read.js
+npm-debug.log

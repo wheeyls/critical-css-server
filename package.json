@@ -8,7 +8,7 @@
   "main": "src/cluster.js",
   "scripts": {
     "start": "node src/cluster.js",
-    "dev": "REDIS_URL=redis://127.0.0.1:6379/ node src/cluster.js",
+    "dev": "REDIS_URL=redis://127.0.0.1:6379/0 node src/cluster.js",
     "test": "mocha --recursive --debug"
   },
   "repository": {
