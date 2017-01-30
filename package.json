@@ -26,6 +26,7 @@
     "criticalcss": "2.1.0",
     "extend": "3.0.0",
     "foreman": "2.0.0",
+    "redis-url": "1.2.1",
     "request": "2.79.0"
   },
   "devDependencies": {
