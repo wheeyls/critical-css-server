@@ -7,7 +7,7 @@
   },
   "main": "src/cluster.js",
   "scripts": {
-    "start": "node src/cluster.js",
+    "start": "nf start",
     "dev": "REDIS_URL=redis://127.0.0.1:6379/0 node src/cluster.js",
     "test": "mocha --recursive --debug"
   },
@@ -21,16 +21,18 @@
   ],
   "license": "MIT",
   "dependencies": {
-    "bull": "^2.1.0",
-    "cluster": "^0.7.7",
-    "criticalcss": "^2.1.0",
-    "extend": "^3.0.0",
-    "request": "^2.79.0"
+    "bull": "2.1.0",
+    "bull-ui": "1.2.1",
+    "cluster": "0.7.7",
+    "criticalcss": "2.1.0",
+    "extend": "3.0.0",
+    "foreman": "2.0.0",
+    "request": "2.79.0"
   },
   "devDependencies": {
-    "expect.js": "^0.3.1",
-    "mocha": "^3.2.0",
-    "redis-mock": "^0.16.0",
-    "simple-mock": "^0.7.3"
+    "expect.js": "0.3.1",
+    "mocha": "3.2.0",
+    "redis-mock": "0.16.0",
+    "simple-mock": "0.7.3"
   }
 }

@@ -1,0 +1,64 @@
+{>"layouts/master" /}
+
+{<title}
+Matador
+{/title}
+
+{<body}
+<div data-bind="visible:!$.isEmptyObject(memory())">
+    <h1 class="page-header">Dashboard</h1>
+    <div class="row placeholders">
+        <div class="col-sm-12 placeholder">
+            <div id="memoryChart" style="width:100%; height: 300px"></div>
+            <h4>Memory Usage</h4>
+            <span class="text-muted">Peak: <span data-bind="text: peakMemory"></span></span>
+        </div>
+    </div>
+    <!--Other charts and information could easily be added later!-->
+</div>
+<div data-bind="visible: keys().length > 0">
+    <h2 class="sub-header">Stuck Jobs</h2>
+    <div class="table-responsive" data-bind="visible: keys().length > 0">
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th>Id</th>
+                <th>Type</th>
+                <th>Status</th>
+                <th>Manage</th>
+            </tr>
+            </thead>
+            <tbody data-bind="foreach: keys">
+            <tr>
+                <td data-bind="text: id"></td>
+                <td data-bind="text: type"></td>
+                <td data-bind="text: status" style="color: red"></td>
+                <td>
+                    <button class="btn btn-default" data-bind="click: redisHandler.fn.deleteById" title="Delete">
+                        <i class="fa fa-trash-o"></i>
+                    </button>&nbsp;
+                    <button class="btn btn-default" data-bind="visible: '{type}' !== 'Pending', click: redisHandler.fn.pendingById" title="Revert to pending">
+                        <i class="fa fa-repeat"></i>
+                    </button>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+<script language="javascript" type="text/javascript" src="{basepath}/js/flot/jquery.flot.js"></script>
+<script language="javascript" type="text/javascript" src="{basepath}/js/flot/jquery.flot.time.js"></script>
+<script src="{basepath}/js/ChartHandler.js"></script>
+<script>
+    {?memory}
+    $(document).ready(function(){
+        var usage = [];
+    {#memory.usage}
+        usage.push({time: "{time}", memory: "{memory}"});
+    {/memory.usage}
+        dataModel.memory(usage);
+        dataModel.peakMemory("{memory.peak.human}");
+    });
+    {/memory}
+</script>
+{/body}
