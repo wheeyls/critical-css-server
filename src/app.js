@@ -2,6 +2,8 @@ var express = require('express');
 var extend = require('extend');
 var redis = require('redis');
 var QueueBuildRequests = require('./workers/QueueBuildRequests.js');
+var requireHeader = require('./middleware/requireHeader.js');
+var requireParams = require('./middleware/requireParams.js');
 
 var bull = require('bull');
 var bodyParser = require('body-parser');
@@ -18,18 +20,16 @@ function prepareApp(config) {
 
   app.use(bodyParser.json());
 
-  app.post('/css', 
-    function (req, res, next) {
-      if (req.get('Content-Type') !== 'application/json') {
-        res.sendStatus(406);
-      } else {
-        next();
-      }
-    },
+  app.post('/api/v1/css',
+    requireHeader('Content-Type', 'application/json'),
+    requireParams(['key', 'url', 'css']),
 
     function (req, res) {
       worker.perform(req.body, function (error, item) {
-        if (error) { res.status(500).send({ error: 'API Error' }); }
+        if (error) {
+          console.log(error);
+          res.sendStatus(500);
+        }
 
         if (item.attributes.content) {
           res.send(item.attributes.content);
