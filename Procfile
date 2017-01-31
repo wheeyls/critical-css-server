@@ -1,2 +1,2 @@
-web: node src/bull-ui.js
+web: node src/index.js
 cluster: node src/cluster.js
