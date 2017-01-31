@@ -8,7 +8,8 @@
   "main": "src/cluster.js",
   "scripts": {
     "start": "nf start",
-    "test": "mocha --recursive --debug"
+    "test": "mocha --recursive --debug",
+    "build-css": "node-sass --output-style=compressed --include-path scss --include-path node_modules/foundation-sites/scss -o public/css/ scss/"
   },
   "repository": {
     "type": "git",
@@ -34,7 +35,10 @@
   },
   "devDependencies": {
     "expect.js": "0.3.1",
+    "foundation-sites": "6.3.0",
+    "nodemon": "1.11.0",
     "mocha": "3.2.0",
+    "node-sass": "4.4.0",
     "redis-mock": "0.16.0",
     "simple-mock": "0.7.3",
     "supertest": "3.0.0"
