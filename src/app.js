@@ -18,17 +18,27 @@ function prepareApp(config) {
 
   app.use(bodyParser.json());
 
-  app.post('/css', function (req, res) {
-    worker.perform(req.body, function (error, item) {
-      if (error) { res.status(500).send({ error: 'API Error' }); }
-
-      if (item.attributes.content) {
-        res.send(item.attributes.content);
+  app.post('/css', 
+    function (req, res, next) {
+      if (req.get('Content-Type') !== 'application/json') {
+        res.sendStatus(406);
       } else {
-        res.status(202).send('Accepted');
+        next();
       }
-    });
-  });
+    },
+
+    function (req, res) {
+      worker.perform(req.body, function (error, item) {
+        if (error) { res.status(500).send({ error: 'API Error' }); }
+
+        if (item.attributes.content) {
+          res.send(item.attributes.content);
+        } else {
+          res.status(202).send('Accepted');
+        }
+      });
+    }
+  );
 
   return app;
 }
