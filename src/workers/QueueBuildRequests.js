@@ -5,15 +5,17 @@ function QueueBuildRequests(client, queue) {
     var item = new CachedCss(client, data.page);
 
     item.load().then(function (attributes) {
-      if (attributes.status !== 'new') { return done(null, item); }
+      if (['new', 'failed'].includes(attributes.status)) {
+        item.createStub(function (err) {
+          if (err) { return done(err); }
 
-      item.createStub(function (err) {
-        if (err) { return done(err); }
-
-        queue.add({ page: item.toJSON(), config: data.config }, { attempts: 1 });
-        console.log('added...');
+          queue.add({ page: item.toJSON(), config: data.config }, { attempts: 1 });
+          console.log('added...');
+          done(null, item);
+        });
+      } else {
         done(null, item);
-      });
+      }
     }).catch(function (e) { done(e); });
   };
 }

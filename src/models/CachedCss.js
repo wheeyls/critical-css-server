@@ -56,7 +56,7 @@ extend(CachedCss.prototype, {
   },
 
   failed: function (cb) {
-    this.client({ status: 'failed' }, cb);
+    this.save({ status: 'failed' }, cb);
   },
 
   begin: function (cb) {
