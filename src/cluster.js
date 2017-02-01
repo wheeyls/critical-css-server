@@ -13,11 +13,15 @@ function processItems() {
   var worker = new BuildCss(generator(), redisClient);
 
   queue.on('completed', function (job) {
-    console.log('completed: ', job.data.key);
+    console.log('completed: ', job.data.page.key);
+  });
+
+  queue.on('error', function (job) {
+    console.log('job failed! ', job.data);
   });
 
   queue.process(function (job, done) {
-    console.log('started...', job.data.key);
+    console.log('started...', job.data.page.key);
 
     worker.perform(job.data, done);
   });

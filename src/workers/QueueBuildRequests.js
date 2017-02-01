@@ -2,7 +2,7 @@ var CachedCss = require('../models/CachedCss.js');
 
 function QueueBuildRequests(client, queue) {
   this.perform = function (data, done) {
-    var item = new CachedCss(client, data);
+    var item = new CachedCss(client, data.page);
 
     item.load().then(function (attributes) {
       if (attributes.status !== 'new') { return done(null, item); }
@@ -10,7 +10,7 @@ function QueueBuildRequests(client, queue) {
       item.createStub(function (err) {
         if (err) { return done(err); }
 
-        queue.add(item.toJSON());
+        queue.add({ page: item.toJSON(), config: data.config });
         console.log('added...');
         done(null, item);
       });

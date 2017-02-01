@@ -3,7 +3,7 @@ var extend = require('extend');
 var redis = require('redis');
 var QueueBuildRequests = require('./workers/QueueBuildRequests.js');
 var requireHeader = require('./middleware/requireHeader.js');
-var requireParams = require('./middleware/requireParams.js');
+var requireNestedParams = require('./middleware/requireNestedParams.js');
 
 var bull = require('bull');
 var bodyParser = require('body-parser');
@@ -22,7 +22,7 @@ function prepareApp(config) {
 
   app.post('/api/v1/css',
     requireHeader('Content-Type', 'application/json'),
-    requireParams(['key', 'url', 'css']),
+    requireNestedParams('page', ['key', 'url', 'css']),
 
     function (req, res) {
       worker.perform(req.body, function (error, item) {

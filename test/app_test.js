@@ -12,11 +12,11 @@ describe('index.js', function () {
     });
 
     describe('with valid params', function () {
-      var params = { key: 1, url: '/path', css: '/css' };
+      var params = { page: { key: 1, url: '/path', css: '/css' } };
 
       describe('asking for item that is ready', function () {
         before(function (done) {
-          this.cached = new CachedCss(this.client, params);
+          this.cached = new CachedCss(this.client, params.page);
           this.cached.finish('css {};', done);
         });
 
@@ -29,7 +29,7 @@ describe('index.js', function () {
       });
 
       describe('asking for item that is not ready', function () {
-        var params = { key: 2, url: '/path', css: '/css' };
+        var params = { page: { key: 2, url: '/path', css: '/css' } };
 
         it('should return a 202', function () {
           return request(this.app).post('/api/v1/css')
