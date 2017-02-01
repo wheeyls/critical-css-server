@@ -8,12 +8,13 @@ var extend = require('extend');
 var tmpPath = path.join(tmpDir, 'crit.css');
 var forced = ['.is-logged-in', '.is-logged-out', '.right-off-canvas-menu'];
 
-module.exports = function (options) {
+module.exports = function () {
   var me;
-  options = options || { forceInclude: forced, ignoreConsole: true };
 
   me = {
-    generate: function (sourceUrl, cssUrl, callback) {
+    generate: function (sourceUrl, cssUrl, options, callback) {
+      options = extend({ forceInclude: forced, ignoreConsole: true }, options);
+
       request(cssUrl).pipe(fs.createWriteStream(tmpPath)).on('close', function() {
         criticalcss.getRules(tmpPath, function(err, output) {
           if (err) {

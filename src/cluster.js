@@ -2,9 +2,10 @@ var bull = require('bull');
 var cluster = require('cluster');
 var generator = require('./generator.js');
 var queue = bull('CriticalPath Generator', process.env.REDIS_URL);
-var workerCount = 1;
+var workerCount = 5;
 var redis = require('redis');
 var BuildCss = require('./workers/BuildCss.js');
+var CachedCss = require('./models/CachedCss.js');
 
 function processItems() {
   console.log('worker started...');
@@ -13,11 +14,15 @@ function processItems() {
   var worker = new BuildCss(generator(), redisClient);
 
   queue.on('completed', function (job) {
-    console.log('completed: ', job.data.key);
+    console.log('completed: ', job.data.page.key);
+  });
+
+  queue.on('error', function (job) {
+    console.log('job failed! ', job.data);
   });
 
   queue.process(function (job, done) {
-    console.log('started...', job.data.key);
+    console.log('started...', job.data.page.key);
 
     worker.perform(job.data, done);
   });
@@ -25,6 +30,8 @@ function processItems() {
 
 if (cluster.isMaster) {
   for (var i = 0, ii = workerCount - 1; i < ii; i += 1) { cluster.fork(); }
+  setInterval(function () { queue.clean(1000 * 60 * 60); }, 60000);
+
   processItems();
 } else {
   processItems();

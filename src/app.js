@@ -1,16 +1,17 @@
 var express = require('express');
 var extend = require('extend');
 var redis = require('redis');
+var redisOpts = require('./redisOpts.js');
 var QueueBuildRequests = require('./workers/QueueBuildRequests.js');
 var requireHeader = require('./middleware/requireHeader.js');
-var requireParams = require('./middleware/requireParams.js');
+var requireNestedParams = require('./middleware/requireNestedParams.js');
 
 var bull = require('bull');
 var bodyParser = require('body-parser');
 
 var defaults = {
-  redis: redis.createClient({ url: process.env.REDIS_URL }),
-  queue: bull('CriticalPath Generator', process.env.REDIS_URL)
+  redis: redis.createClient(redisOpts),
+  queue: bull('CriticalPath Generator', process.env.REDIS_URL, redisOpts.options)
 };
 
 function prepareApp(config) {
@@ -22,7 +23,7 @@ function prepareApp(config) {
 
   app.post('/api/v1/css',
     requireHeader('Content-Type', 'application/json'),
-    requireParams(['key', 'url', 'css']),
+    requireNestedParams('page', ['key', 'url', 'css']),
 
     function (req, res) {
       worker.perform(req.body, function (error, item) {
@@ -32,8 +33,10 @@ function prepareApp(config) {
         }
 
         if (item.attributes.content) {
+          console.log('cache-hit', req.body);
           res.send(item.attributes.content);
         } else {
+          console.log('cache-miss', req.body);
           res.status(202).send('Accepted');
         }
       });

@@ -3,20 +3,21 @@ var prepareApp = require('../src/app.js');
 var expect = require('expect.js');
 var CachedCss = require('../src/models/CachedCss.js');
 var redis = require('redis-mock');
+var simple = require('simple-mock');
 
-describe('index.js', function () {
+describe('app.js', function () {
   describe('POST /api/v1/css', function () {
     before(function () {
       this.client = redis.createClient();
-      this.app = prepareApp({ redis: this.client });
+      this.app = prepareApp({ redis: this.client, queue: { add: simple.stub() } });
     });
 
     describe('with valid params', function () {
-      var params = { key: 1, url: '/path', css: '/css' };
+      var params = { page: { key: 1, url: '/path', css: '/css' } };
 
       describe('asking for item that is ready', function () {
         before(function (done) {
-          this.cached = new CachedCss(this.client, params);
+          this.cached = new CachedCss(this.client, params.page);
           this.cached.finish('css {};', done);
         });
 
@@ -29,7 +30,11 @@ describe('index.js', function () {
       });
 
       describe('asking for item that is not ready', function () {
-        var params = { key: 2, url: '/path', css: '/css' };
+        var params = { page: { key: 2, url: '/path', css: '/css' } };
+        before(function () {
+          this.client = redis.createClient();
+          this.app = prepareApp({ redis: this.client });
+        });
 
         it('should return a 202', function () {
           return request(this.app).post('/api/v1/css')

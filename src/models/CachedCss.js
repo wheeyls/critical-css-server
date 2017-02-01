@@ -9,6 +9,8 @@ function CachedCss(client, finders) {
 extend(CachedCss.prototype, {
   loaded: false,
 
+  expireAfter: 60 * 60,
+
   load: function () {
     var that = this;
 
@@ -35,9 +37,14 @@ extend(CachedCss.prototype, {
   save: function (attrs, cb) {
     if (attrs) { extend(this.attributes, attrs); }
 
+    this.client.expire(this.finders.key, this.expireAfter);
     this.client.hmset(this.finders.key, this.flatAttributes(), function (err, value) {
       cb(err);
     });
+  },
+
+  del: function (cb) {
+    this.client.del(this.finders.key, cb);
   },
 
   createStub: function (cb) {
@@ -46,6 +53,14 @@ extend(CachedCss.prototype, {
 
   finish: function (content, cb) {
     this.save({ status: 'done', content: content }, cb);
+  },
+
+  failed: function (cb) {
+    this.client({ status: 'failed' }, cb);
+  },
+
+  begin: function (cb) {
+    this.save({ status: 'working' }, cb);
   },
 
   toJSON: function () {

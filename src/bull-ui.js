@@ -1,12 +1,4 @@
-var port = process.env.PORT || 8080;
-var redisOpts = require('redis-url').parse(process.env.REDIS_URL);
-var app = require('bull-ui/app')({ redis: {
-  host: redisOpts.hostname,
-  port: redisOpts.port,
-  password: redisOpts.password,
-  options: { database: redisOpts.database } }
-});
+var redisOpts = require('./redisOpts.js');
+var bullUI = require('bull-ui/app')({ redis: redisOpts });
 
-app.listen(port, function() {
-  console.log('bull-ui started listening on port', this.address().port);
-});
+module.exports = bullUI;
