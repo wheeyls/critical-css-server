@@ -33,10 +33,8 @@ function prepareApp(config) {
         }
 
         if (item.attributes.content) {
-          console.log('cache-hit', req.body.page);
           res.send(item.attributes.content);
         } else {
-          console.log('cache-miss', req.body.page);
           res.status(202).send('Accepted');
         }
       });
