@@ -1,2 +1,1 @@
-web: node src/index.js
-cluster: node src/cluster.js
+web: node src/main.js
