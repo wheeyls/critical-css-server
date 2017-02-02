@@ -5,5 +5,5 @@ module.exports = {
   host: redisOpts.hostname,
   port: redisOpts.port,
   password: redisOpts.password,
-  options: { db: redisOpts.database }
+  options: { db: redisOpts.database || 0 }
 };
