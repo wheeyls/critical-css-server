@@ -1,3 +1,5 @@
+require('newrelic');
+
 var bull = require('bull');
 var cluster = require('cluster');
 var generator = require('./generator.js');
@@ -8,7 +10,6 @@ var BuildCss = require('./workers/BuildCss.js');
 var CachedCss = require('./models/CachedCss.js');
 var app = require('./app.js')();
 var matador = require('./bull-ui.js');
-require('newrelic');
 
 function processItems() {
   console.log('worker started...');

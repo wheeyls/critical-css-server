@@ -20,6 +20,7 @@
   ],
   "license": "MIT",
   "dependencies": {
+    "@newrelic/native-metrics": "2.0.2",
     "body-parser": "1.16.0",
     "bull": "2.1.0",
     "bull-ui": "1.2.1",
