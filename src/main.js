@@ -8,6 +8,7 @@ var BuildCss = require('./workers/BuildCss.js');
 var CachedCss = require('./models/CachedCss.js');
 var app = require('./app.js')();
 var matador = require('./bull-ui.js');
+require('newrelic');
 
 function processItems() {
   console.log('worker started...');
