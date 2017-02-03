@@ -1,7 +1,7 @@
 {
-  "name": "critical-path-builder",
+  "name": "critical-path-server",
   "version": "0.0.1",
-  "description": "Build critical path css and push it into a database",
+  "description": "Build critical path css asynchronously on demand",
   "engines": {
     "node": "7.4.0"
   },
