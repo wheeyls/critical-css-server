@@ -12,7 +12,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/wheeyls/critical-path-builder"
+    "url": "https://github.com/wheeyls/critical-path-server"
   },
   "keywords": [
     "node",
