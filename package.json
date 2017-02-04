@@ -1,11 +1,11 @@
 {
   "name": "critical-path-server",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Build critical path css asynchronously on demand",
   "engines": {
     "node": "7.4.0"
   },
-  "main": "src/cluster.js",
+  "main": "src/main.js",
   "scripts": {
     "start": "nf start",
     "test": "mocha --recursive --debug"
