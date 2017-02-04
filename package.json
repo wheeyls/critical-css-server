@@ -7,7 +7,7 @@
   },
   "main": "src/main.js",
   "scripts": {
-    "start": "nf start",
+    "start": "node src/main.js",
     "test": "mocha --recursive --debug"
   },
   "repository": {
@@ -16,11 +16,14 @@
   },
   "keywords": [
     "node",
-    "criticalcss"
+    "criticalcss",
+    "above-the-fold",
+    "inline-css",
+    "pagespeed",
+    "phantomjs"
   ],
   "license": "MIT",
   "dependencies": {
-    "@newrelic/native-metrics": "2.0.2",
     "body-parser": "1.16.0",
     "bull": "2.1.0",
     "bull-ui": "1.2.1",
@@ -29,7 +32,6 @@
     "express": "4.14.1",
     "extend": "3.0.0",
     "foreman": "2.0.0",
-    "newrelic": "1.36.2",
     "redis": "2.6.5",
     "redis-url": "1.2.1",
     "request": "2.79.0"
