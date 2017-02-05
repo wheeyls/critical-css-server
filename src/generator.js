@@ -13,17 +13,21 @@ module.exports = function () {
 
   me = {
     generate: function (sourceUrl, cssUrl, options, callback) {
-      options = extend({ forceInclude: forced, ignoreConsole: true }, options);
+      try {
+        options = extend({ forceInclude: forced, ignoreConsole: true }, options);
 
-      request(cssUrl).pipe(fs.createWriteStream(tmpPath)).on('close', function() {
-        criticalcss.getRules(tmpPath, function(err, output) {
-          if (err) {
-            callback(err);
-          } else {
-            criticalcss.findCritical(sourceUrl, extend({ rules: JSON.parse(output) }, options), callback);
-          }
+        request(cssUrl).pipe(fs.createWriteStream(tmpPath)).on('close', function() {
+          criticalcss.getRules(tmpPath, function(err, output) {
+            if (err) {
+              callback(err);
+            } else {
+              criticalcss.findCritical(sourceUrl, extend({ rules: JSON.parse(output) }, options), callback);
+            }
+          });
         });
-      });
+      } catch (err) {
+        callback(err);
+      }
     }
   };
 
