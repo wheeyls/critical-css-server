@@ -9,7 +9,7 @@ function BuildCss(generator, client) {
     item.begin(function () {
       generator.generate(pageData.url, pageData.css, config, function (err, output) {
         if (err) {
-          done(err);
+          item.del(function () { done(err); });
         } else {
           item.finish(output, done);
         }

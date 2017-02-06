@@ -18,6 +18,10 @@ module.exports = function (queue) {
         console.log('job failed! ', job.data);
       });
 
+      queue.on('failed', function (job) {
+        console.log('job failed! ', job.data);
+      });
+
       queue.process(function (job, done) {
         console.log('started...', job.data.page.key);
 
