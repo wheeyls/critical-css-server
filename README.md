@@ -33,3 +33,11 @@ The first request returns immediately, and starts generating the CSS in the back
 
     curl -H "Content-Type: application/json" -X POST -d '{ "page": {"key":"unique-key","url":"http://www.example.com/","css":"https://www.example.com/style.css"}' localhost:8080/api/v1/css
     > .your-critical-css {}
+
+
+## Ruby on Rails
+
+Use the Ruby on Rails client to manage rewriting and lazy-loading your other CSS assets, once the critical path has been
+compiled and is available.
+
+[RailsCriticalCssServer](https://github.com/wheeyls/rails_critical_css_server)
