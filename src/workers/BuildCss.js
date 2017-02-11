@@ -1,7 +1,8 @@
 var CachedCss = require('../models/CachedCss.js');
+var bluebird = require('bluebird');
 
 function BuildCss(generator, client) {
-  this.perform = function (data, done) {
+  this.perform = bluebird.promisify(function (data, done) {
     var pageData = data.page;
     var config = data.config;
     var item = new CachedCss(client, pageData);
@@ -15,7 +16,7 @@ function BuildCss(generator, client) {
         }
       });
     });
-  };
+  });
 }
 
 module.exports = BuildCss;

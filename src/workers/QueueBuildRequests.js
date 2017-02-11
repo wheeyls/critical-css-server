@@ -1,7 +1,8 @@
 var CachedCss = require('../models/CachedCss.js');
+var bluebird = require('bluebird');
 
 function QueueBuildRequests(client, queue) {
-  this.perform = function (data, done) {
+  this.perform = bluebird.promisify(function (data, done) {
     var item = new CachedCss(client, data.page);
 
     item.load().then(function (attributes) {
@@ -17,7 +18,7 @@ function QueueBuildRequests(client, queue) {
         done(null, item);
       }
     }).catch(function (e) { done(e); });
-  };
+  });
 }
 
 module.exports = QueueBuildRequests;

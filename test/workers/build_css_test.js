@@ -16,7 +16,7 @@ describe('BuildCss', function () {
     it('calls generate', function (done) {
       var that = this;
 
-      this.subject.perform(that.data, function () {
+      this.subject.perform(that.data).then(function () {
         expect(that.generator.generate.lastCall.args[0]).to.eql('/path');
         expect(that.generator.generate.lastCall.args[1]).to.eql('/css');
         expect(that.generator.generate.lastCall.args[2]).to.be(that.data.config);
@@ -27,12 +27,12 @@ describe('BuildCss', function () {
     it('persists the results to a model', function (done) {
       var item = new CachedCss(this.client, this.data.page);
 
-      this.subject.perform(this.data, function () {
+      this.subject.perform(this.data).then(function () {
         item.load().then(function () {
           expect(item.attributes.status).to.eql('done');
           expect(item.attributes.content).to.eql('content');
           done();
-        }).catch(function (e) { done(e); });
+        });
       });
     });
   });

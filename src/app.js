@@ -26,17 +26,15 @@ function prepareApp(config) {
     requireNestedParams('page', ['key', 'url', 'css']),
 
     function (req, res) {
-      worker.perform(req.body, function (error, item) {
-        if (error) {
-          console.log(error);
-          res.sendStatus(500);
-        }
-
+      worker.perform(req.body).then(function (item) {
         if (item.attributes.content) {
           res.send(item.attributes.content);
         } else {
           res.status(202).send('Accepted');
         }
+      }).catch(function (e) {
+        console.log(e);
+        res.sendStatus(500);
       });
     }
   );

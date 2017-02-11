@@ -25,7 +25,11 @@ module.exports = function (queue) {
       queue.process(function (job, done) {
         console.log('started...', job.data.page.key);
 
-        worker.perform(job.data, done);
+        return worker.perform(job.data).then(function (data) {
+          done(null, data);
+        }).catch(function (err) {
+          done(err);
+        });
       });
     }
   }

@@ -1,4 +1,5 @@
 var request = require('request');
+var bluebird = require('bluebird');
 var path = require( 'path' );
 var criticalcss = require('criticalcss');
 var fs = require('fs');
@@ -12,7 +13,7 @@ module.exports = function () {
   var me;
 
   me = {
-    generate: function (sourceUrl, cssUrl, options, callback) {
+    generate: bluebird.promisify(function (sourceUrl, cssUrl, options, callback) {
       try {
         options = extend({ forceInclude: forced, ignoreConsole: true }, options);
 
@@ -28,7 +29,7 @@ module.exports = function () {
       } catch (err) {
         callback(err);
       }
-    }
+    })
   };
 
   return me;
