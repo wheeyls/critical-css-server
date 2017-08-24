@@ -7,7 +7,10 @@ var tmpDir      = require('os').tmpdir();
 var extend      = require('extend');
 
 var tmpPath = path.join(tmpDir, 'crit.css');
-var forced = ['.is-logged-in', '.is-logged-out', '.right-off-canvas-menu'];
+var forced = [];
+
+var defaultOptions = { forceInclude: forced, ignoreConsole: true };
+var phantomJsOptions = { 'ssl-protocol': 'any' };
 
 module.exports = function () {
   var me;
@@ -15,10 +18,10 @@ module.exports = function () {
   me = {
     generate: bluebird.promisify(function (sourceUrl, cssUrl, options, callback) {
       try {
-        options = extend({ forceInclude: forced, ignoreConsole: true }, options);
+        options = extend({}, defaultOptions, options);
 
         request({ uri: cssUrl, timeout: 10000 }).on('error', callback).pipe(fs.createWriteStream(tmpPath)).on('close', function() {
-          penthouse({ url: sourceUrl, css: tmpPath })
+          penthouse(extend(options, { url: sourceUrl, css: tmpPath, phantomJsOptions: phantomJsOptions }))
             .then(function (criticalCss) { callback(null, criticalCss); })
             .catch(callback);
         });

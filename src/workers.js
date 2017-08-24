@@ -15,11 +15,13 @@ module.exports = function (queue) {
       });
 
       queue.on('error', function (job) {
-        console.log('job failed! ', job.data);
+        console.log('job error! ', job.data);
+        throw arguments;
       });
 
       queue.on('failed', function (job) {
         console.log('job failed! ', job.data);
+        throw console.log(arguments[0], arguments[1], arguments[2]);
       });
 
       queue.process(function (job, done) {

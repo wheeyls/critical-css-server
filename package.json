@@ -1,6 +1,6 @@
 {
   "name": "critical-css-server",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "description": "Build critical path css asynchronously on demand",
   "engines": {
     "node": "7.4.0"
