@@ -1,5 +1,6 @@
+// @format
 function requireNestedParams(parentKey, keys) {
-  return function (req, res, next) {
+  return function(req, res, next) {
     var hash = req.body && req.body[parentKey];
     if (!hash) {
       console.log('Missing Required Key', parentKey);
@@ -8,8 +9,12 @@ function requireNestedParams(parentKey, keys) {
 
     var paramKeys = Object.keys(hash);
 
-    if (keys.some(function (key) { return !paramKeys.includes(key); })) {
-      console.log('Missing Required Key', { required: keys, actual: paramKeys });
+    if (
+      keys.some(function(key) {
+        return !paramKeys.includes(key);
+      })
+    ) {
+      console.log('Missing Required Key', {required: keys, actual: paramKeys});
       res.sendStatus(406);
     } else {
       next();

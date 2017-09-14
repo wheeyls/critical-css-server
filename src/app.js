@@ -1,3 +1,4 @@
+// @format
 var express = require('express');
 var extend = require('extend');
 var redis = require('redis');
@@ -11,7 +12,11 @@ var bodyParser = require('body-parser');
 
 var defaults = {
   redis: redis.createClient(redisOpts),
-  queue: bull('CriticalPath Generator', process.env.REDIS_URL, redisOpts.options)
+  queue: bull(
+    'CriticalPath Generator',
+    process.env.REDIS_URL,
+    redisOpts.options,
+  ),
 };
 
 function prepareApp(config) {
@@ -21,22 +26,25 @@ function prepareApp(config) {
 
   app.use(bodyParser.json());
 
-  app.post('/api/v1/css',
+  app.post(
+    '/api/v1/css',
     requireHeader('Content-Type', 'application/json'),
     requireNestedParams('page', ['key', 'url', 'css']),
-
-    function (req, res) {
-      worker.perform(req.body).then(function (item) {
-        if (item.attributes.content) {
-          res.send(item.attributes.content);
-        } else {
-          res.status(202).send('Accepted');
-        }
-      }).catch(function (e) {
-        console.log(e);
-        res.sendStatus(500);
-      });
-    }
+    function(req, res) {
+      worker
+        .perform(req.body)
+        .then(function(item) {
+          if (item.attributes.content) {
+            res.send(item.attributes.content);
+          } else {
+            res.status(202).send('Accepted');
+          }
+        })
+        .catch(function(e) {
+          console.log(e);
+          res.sendStatus(500);
+        });
+    },
   );
 
   return app;

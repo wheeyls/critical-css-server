@@ -1,3 +1,4 @@
+// @format
 var extend = require('extend');
 
 function CachedCss(client, finders) {
@@ -11,18 +12,20 @@ extend(CachedCss.prototype, {
 
   expireAfter: 60 * 60,
 
-  load: function () {
+  load: function() {
     var that = this;
 
-    return new Promise(function (resolve, reject) {
+    return new Promise(function(resolve, reject) {
       if (that.loaded) {
         resolve(that.attributes);
       } else {
-        that.client.hgetall(that.finders.key, function (err, value) {
-          if (err) { return reject(err); }
+        that.client.hgetall(that.finders.key, function(err, value) {
+          if (err) {
+            return reject(err);
+          }
 
           if (!value) {
-            extend(that.attributes, { status: 'new' });
+            extend(that.attributes, {status: 'new'});
           } else {
             that.attributes = value;
           }
@@ -34,50 +37,55 @@ extend(CachedCss.prototype, {
     });
   },
 
-  save: function (attrs, cb) {
-    if (attrs) { extend(this.attributes, attrs); }
+  save: function(attrs, cb) {
+    if (attrs) {
+      extend(this.attributes, attrs);
+    }
 
     this.client.expire(this.finders.key, this.expireAfter);
-    this.client.hmset(this.finders.key, this.flatAttributes(), function (err, value) {
+    this.client.hmset(this.finders.key, this.flatAttributes(), function(
+      err,
+      value,
+    ) {
       cb(err);
     });
   },
 
-  del: function (cb) {
+  del: function(cb) {
     this.client.del(this.finders.key, cb);
   },
 
-  createStub: function (cb) {
-    this.save({ status: 'waiting' }, cb);
+  createStub: function(cb) {
+    this.save({status: 'waiting'}, cb);
   },
 
-  finish: function (content, cb) {
-    this.save({ status: 'done', content: content }, cb);
+  finish: function(content, cb) {
+    this.save({status: 'done', content: content}, cb);
   },
 
-  failed: function (cb) {
-    this.save({ status: 'failed' }, cb);
+  failed: function(cb) {
+    this.save({status: 'failed'}, cb);
   },
 
-  begin: function (cb) {
-    this.save({ status: 'working' }, cb);
+  begin: function(cb) {
+    this.save({status: 'working'}, cb);
   },
 
-  toJSON: function () {
+  toJSON: function() {
     return this.attributes;
   },
 
-  flatAttributes: function () {
+  flatAttributes: function() {
     var that = this;
     var results = [];
 
-    Object.keys(this.attributes).forEach(function (key) {
+    Object.keys(this.attributes).forEach(function(key) {
       results.push(key);
       results.push(that.attributes[key]);
     });
 
     return results;
-  }
+  },
 });
 
 module.exports = CachedCss;
