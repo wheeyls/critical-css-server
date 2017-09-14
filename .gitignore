@@ -5,3 +5,4 @@ npm-debug.log
 newrelic_agent.log
 curl_command
 .DS_Store
+node_modules
