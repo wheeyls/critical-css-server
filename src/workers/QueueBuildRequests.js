@@ -17,7 +17,7 @@ function QueueBuildRequests(client, queue) {
 
             queue.add(
               {page: item.toJSON(), config: data.config},
-              {attempts: 1},
+              {attempts: 1, timeout: 30000},
             );
             console.log('added...');
             done(null, item);
