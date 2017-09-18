@@ -25,6 +25,7 @@ var generate = bluebird.promisify(function(
     request({uri: cssUrl, timeout: 10000})
       .on('error', callback)
       .pipe(fs.createWriteStream(tmpPath))
+      .on('error', callback)
       .on('close', function() {
         penthouse(
           extend(options, {
