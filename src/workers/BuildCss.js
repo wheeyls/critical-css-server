@@ -8,20 +8,26 @@ function BuildCss(generator, client) {
     var config = data.config;
     var item = new CachedCss(client, pageData);
 
-    item.begin(function() {
-      generator.generate(pageData.url, pageData.css, config, function(
-        err,
-        output,
-      ) {
-        if (err) {
-          item.del(function() {
-            done(err);
-          });
-        } else {
-          item.finish(output, done);
-        }
+    try {
+      item.begin(function() {
+        generator.generate(pageData.url, pageData.css, config, function(
+          err,
+          output
+        ) {
+          if (err) {
+            item.del(function() {
+              done(err);
+            });
+          } else {
+            item.finish(output, done);
+          }
+        });
       });
-    });
+    } catch (err) {
+      item.del(function() {
+        done(err);
+      });
+    }
   });
 }
 
