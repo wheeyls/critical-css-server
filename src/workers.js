@@ -20,6 +20,10 @@ module.exports = function(queue) {
         throw arguments;
       });
 
+      queue.on('exit', function(worker, code, signal) {
+        console.log('bull: worker died', worker, code, signal);
+      });
+
       queue.on('failed', function(job) {
         console.log('bull: job failed! ', job.data);
         throw console.log(arguments[0], arguments[1], arguments[2]);
