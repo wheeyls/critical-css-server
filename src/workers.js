@@ -16,17 +16,19 @@ module.exports = function(queue) {
       });
 
       queue.on('error', function(job) {
-        console.log('bull: job error! ', job.data);
-        throw arguments;
+        console.log('bull: job error! ', job);
       });
+
+      queue.on('stalled', function(job) {
+        console.log('bull: job stalled', job);
+      })
 
       queue.on('exit', function(worker, code, signal) {
         console.log('bull: worker died', worker, code, signal);
       });
 
       queue.on('failed', function(job) {
-        console.log('bull: job failed! ', job.data);
-        throw console.log(arguments[0], arguments[1], arguments[2]);
+        console.log('bull: job failed! ', job);
       });
 
       queue.process(function(job, done) {
