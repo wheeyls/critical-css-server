@@ -26,12 +26,12 @@ Builds can be started after each deploy, and a few seconds later, you'll be able
 
 The first request returns immediately, and starts generating the CSS in the background:
 
-    curl -H "Content-Type: application/json" -X POST -d '{ "page": {"key":"unique-key","url":"http://www.example.com/","css":"https://www.example.com/style.css"}' localhost:8080/api/v1/css
+    curl -H "Content-Type: application/json" -X POST -d '{ "page": {"key":"unique-key","url":"http://www.example.com/","css":"https://www.example.com/style.css"}}' localhost:5000/api/v1/css
     > Accepted
 
 #### Eventually...
 
-    curl -H "Content-Type: application/json" -X POST -d '{ "page": {"key":"unique-key","url":"http://www.example.com/","css":"https://www.example.com/style.css"}' localhost:8080/api/v1/css
+    curl -H "Content-Type: application/json" -X POST -d '{ "page": {"key":"unique-key","url":"http://www.example.com/","css":"https://www.example.com/style.css"}}' localhost:5000/api/v1/css
     > .your-critical-css {}
 
 
