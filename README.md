@@ -41,3 +41,12 @@ Use the Ruby on Rails client to manage rewriting and lazy-loading your other CSS
 compiled and is available.
 
 [RailsCriticalCssServer](https://github.com/wheeyls/rails_critical_css_server)
+
+## Docker
+
+This repo is setup with docker.  You can get it up and running with the following commands.
+
+```
+docker build -t critical-css-server .
+docker-compose up critical-css
+```

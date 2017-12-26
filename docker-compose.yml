@@ -1,0 +1,15 @@
+version: '2'
+services:
+  redis:
+    image: redis:2.8
+    ports:
+      - '6739:6379'
+  critical-css:
+    image: critical-css-server:latest
+    command: npm start
+    ports:
+      - '5000:5000'
+    depends_on:
+      - redis
+    volumes:
+      - ./:/app_home:delegated
