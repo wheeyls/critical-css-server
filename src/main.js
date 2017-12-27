@@ -4,13 +4,14 @@ var workerCount = process.env.CONCURRENCY || 1;
 var app = require('./app.js')();
 var queue = require('./generatorQueue.js');
 var workers = require('./workers.js')(queue);
+var port = process.env.PORT || 5000;
 
 if (cluster.isMaster) {
   setInterval(function() {
     queue.clean(1000 * 60 * 60);
   }, 60000);
 
-  app.listen(process.env.PORT, function() {
+  app.listen(port, function() {
     console.log('Listening on port:', this.address().port);
   });
 
