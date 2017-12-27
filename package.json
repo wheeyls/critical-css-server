@@ -8,7 +8,8 @@
   "main": "src/main.js",
   "scripts": {
     "start": "node src/main.js",
-    "test": "mocha --recursive"
+    "test": "mocha --recursive",
+    "debug": "node --inspect-brk src/main.js"
   },
   "repository": {
     "type": "git",
