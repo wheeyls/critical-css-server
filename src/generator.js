@@ -31,6 +31,7 @@ var generate = bluebird.promisify(function(
           extend(options, {
             url: sourceUrl,
             css: tmpPath,
+            strict: true,
             phantomJsOptions: phantomJsOptions,
           }),
         )
