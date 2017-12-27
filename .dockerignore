@@ -1,0 +1,6 @@
+tmp
+log
+.git
+*.dump
+.idea
+*.swp
