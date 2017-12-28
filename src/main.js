@@ -16,7 +16,18 @@ if (cluster.isMaster) {
   });
 
   for (var i = 0, ii = workerCount; i < ii; i += 1) {
-    cluster.fork();
+    var clusterWorker = cluster.fork();
+    clusterWorker.on('exit', function(code, signal) {
+      if (signal) {
+        console.log(`worker was killed by signal: ${signal}`);
+      } else if (code !== 0) {
+        console.error(`worker exited with error code: ${code}`);
+      } else {
+        console.log('worker success!');
+      }
+    });
+
+    clusterWorker.on('error', function(err) { console.error(err) });
   }
 } else {
   workers.start();

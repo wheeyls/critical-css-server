@@ -13,22 +13,22 @@ module.exports = function(queue) {
       });
 
       queue.on('error', function(job) {
-        console.log('bull: job error! ', job);
+        console.error('bull: job error! ', job);
       });
 
       queue.on('stalled', function(job) {
-        console.log('bull: job stalled', job);
+        console.error('bull: job stalled', job);
       })
 
       queue.on('exit', function(worker, code, signal) {
-        console.log('bull: worker died', worker, code, signal);
+        console.error('bull: worker died', worker, code, signal);
       });
 
       queue.on('failed', function(job) {
-        console.log('bull: job failed! ', job);
+        console.error('bull: job failed! ', job);
       });
 
-      queue.process(path.join(process.cwd(),'src', 'processors', 'cssProcessor.js'));
+      queue.process(path.join(__dirname, 'processors', 'cssProcessor.js'));
     },
   };
 };
