@@ -24,6 +24,8 @@ function prepareApp(config) {
   var options = extend(defaults, config);
   var worker = new QueueBuildRequests(options.redis, options.queue);
 
+  options.redis.on('error', function(err) { console.error(err); });
+
   app.use(bodyParser.json());
 
   app.post(

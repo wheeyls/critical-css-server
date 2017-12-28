@@ -4,6 +4,7 @@ var redis = require('redis');
 var generator = require('../generator.js');
 
 var redisClient = redis.createClient({ url: process.env.REDIS_URL });
+redisClient.on('error', function (err) { console.error(err) });
 var worker = new BuildCss(generator(), redisClient);
 
 
@@ -16,7 +17,7 @@ module.exports = function (job, done) {
         done(null, data);
       })
       .catch(function (err) {
-        console.log('bull: process catch', job.data.page.key);
+        console.error('bull: process catch', job.data.page.key);
         done(err);
       });
 };
