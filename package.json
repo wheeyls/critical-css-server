@@ -1,6 +1,6 @@
 {
   "name": "critical-css-server",
-  "version": "0.4.2",
+  "version": "0.5.0",
   "description": "Build critical path css asynchronously on demand",
   "main": "src/main.js",
   "scripts": {
