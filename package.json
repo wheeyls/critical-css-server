@@ -32,7 +32,7 @@
     "redis": "2.6.5",
     "redis-url": "1.2.1",
     "request": "2.79.0",
-    "yarn": "1.0.2"
+    "yarn": "1.22.0"
   },
   "devDependencies": {
     "expect.js": "0.3.1",
