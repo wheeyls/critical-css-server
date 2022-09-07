@@ -33,6 +33,10 @@ var generate = bluebird.promisify(function(
             css: tmpPath,
             strict: true,
             phantomJsOptions: phantomJsOptions,
+            puppeteer: {
+              getBrowser: () => browserPromise,
+              pageGotoOptions: {waitUntil: 'networkidle0'}
+            }
           }),
         )
           .then(function(criticalCss) {
