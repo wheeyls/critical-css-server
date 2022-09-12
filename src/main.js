@@ -4,7 +4,7 @@ var workerCount = process.env.CONCURRENCY || 1;
 var app = require('./app.js')();
 var queue = require('./generatorQueue.js');
 var workers = require('./workers.js')(queue);
-var port = process.env.PORT || 5000;
+var port = process.env.PORT || 5001;
 
 if (cluster.isMaster) {
   setInterval(function() {

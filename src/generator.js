@@ -6,7 +6,7 @@ var penthouse = require('penthouse');
 var fs = require('fs');
 var tmpDir = require('os').tmpdir();
 var extend = require('extend');
-
+var puppeteer = require('puppeteer') 
 var tmpPath = path.join(tmpDir, 'crit.css');
 var forced = [];
 
@@ -22,17 +22,33 @@ var generate = bluebird.promisify(function(
   try {
     options = extend({}, defaultOptions, options);
 
-    request({uri: cssUrl, timeout: 10000})
+    request({uri: cssUrl, timeout: 10000, rejectUnauthorized:false})
       .on('error', callback)
       .pipe(fs.createWriteStream(tmpPath))
       .on('error', callback)
       .on('close', function() {
+
+        const browserPromise = puppeteer.launch({
+          ignoreHTTPSErrors: true,
+          args: ['--disable-setuid-sandbox', '--no-sandbox'],
+          // not required to specify here, but saves Penthouse some work if you will
+          // re-use the same viewport for most penthouse calls.
+          defaultViewport: {
+            width: 1300,
+            height: 900
+          }
+        })
+
         penthouse(
           extend(options, {
             url: sourceUrl,
             css: tmpPath,
             strict: true,
             phantomJsOptions: phantomJsOptions,
+            puppeteer: {
+              getBrowser: () => browserPromise,
+              pageGotoOptions: {waitUntil: 'networkidle0'}
+            }
           }),
         )
           .then(function(criticalCss) {

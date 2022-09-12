@@ -1,15 +1,18 @@
 version: '2'
 services:
   redis:
-    image: redis:2.8
+    image: redis:7-bullseye
     ports:
       - '6739:6379'
+    command: redis-server --save "" --appendonly no
   critical-css:
-    image: critical-css-server:latest
+    build: .
     command: npm start
     ports:
-      - '5000:5000'
+      - '5001:5001'
     depends_on:
       - redis
     volumes:
-      - ./:/app_home:delegated
+      - ./:/app_home:delegated      
+    environment:
+      - NODE_TLS_REJECT_UNAUTHORIZED=0
